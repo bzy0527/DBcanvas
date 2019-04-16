@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试画线</title>
+    <script src="../JS/DBCanvas.js"></script>
+
+</head>
+<body>
+
+<div id="layoutroot" style="height:1000px;width:100%;border:1px solid blue">
+
+    <!--<canvas class="canvas" style="height: 600px;width: 900px;border: 2px solid green;display: inline-block">-->
+
+    <!--</canvas>-->
+
+    <canvas class="canvas" width="950" height="1000" style="border:1px solid #d3d3d3;">
+        您的浏览器不支持canvas标签显示
+    </canvas>
+
+
+
+    <button type="button" value="方桌" onclick="creatRectTable()" style="margin-left: 20px;background-color: #b3d4fc;width: 50px;height: 30px;font-size: 15px" >方桌
+
+    </button>
+
+    <button type="button" value="圆桌" onclick="creatArcTable()" style="margin-left: 20px;background-color: #b3d4fc;width: 50px;height: 30px;font-size: 15px" >圆桌
+
+    </button>
+    <button type="button" value="隔断" onclick="creatPartition()" style="margin-left: 20px;background-color: #b3d4fc;width: 50px;height: 30px;font-size: 15px" >隔断
+
+    </button>
+    <button type="button" value="通道" onclick="creatAisle()" style="margin-left: 20px;background-color: #b3d4fc;width: 50px;height: 30px;font-size: 15px" >通道
+
+    </button>
+    <button type="button" value="安全出口" onclick="creatExit()" style="margin-left: 20px;background-color: #b3d4fc;width: 100px;height: 30px;font-size: 15px" >安全出口
+
+    </button>
+    <button type="button" value="卫生间" onclick="creatToilet()" style="margin-left: 20px;background-color: #b3d4fc;width: 70px;height: 30px;font-size: 15px" >卫生间
+
+    </button>
+
+
+    <button type="button" value="切换模式" onclick="changeMode()" style="margin-left: 20px;background-color: #b3d4fc;width: 80px;height: 30px;font-size: 15px" >切换模式
+
+    </button>
+
+    <button type="button" value="保存数据" onclick="saveDatas()" style="margin-left: 20px;background-color: #b3d4fc;width: 80px;height: 30px;font-size: 15px" >保存数据
+
+    </button>
+    
+    <button type="button" value="读取数据" onclick="readDatas()" style="margin-left: 20px;background-color: #b3d4fc;width: 80px;height: 30px;font-size: 15px" >读取数据
+
+    </button>
+
+    <button type="button" value="删除图形" onclick="removeShape()" style="margin-left: 20px;background-color: #b3d4fc;width: 80px;height: 30px;font-size: 15px" >删除图形
+
+    </button>
+
+    <div style="width: 900px;height: 300px;border: 2px solid cornflowerblue;overflow: auto;margin-top: 10px">
+        <b>控制台输出：</b>
+        <p class="print" style="display: block;height: 300px;width: 900px;">
+        </p>
+    </div>
+
+    <button type="button" value="清除" onclick="clearPrint()" style="margin-left: 20px;background-color: red;width: 100px;height: 40px;font-size: 22px" >清除
+
+    </button>
+
+
+
+
+</div>
+
+<script>
+    function clearPrint() {
+        document.getElementsByClassName('print')[0].innerHTML = '';
+    }
+
+
+    try{
+        var drawV = new DBCanvas.DrawView();
+//        layoutroot.appendChild(drawV.canvas);
+//        drawV.canvas.style.width = 300;
+//        drawV.canvas.style.height = 150;
+//        drawV.canvas.style.border = "2px solid green";
+//        drawV.canvas.style.display = "inline-block";
+
+    }catch (error){
+
+       DBCanvas.Tools.print(error);
+    }
+
+
+    function creatRectTable() {
+        for (var i=0;i<1;i++){
+             var table = new DBCanvas.RectTable(60,90,150,90);
+       table.strokeStyle = "black";
+       table.deskColor = "#18B1F7";
+//       table.tableColor = "black";
+//        table.tableNum = "餐桌";
+       table.personCount = 6;
+       table.alpha = 1.0;
+       table.lineWidth = 1;
+        drawV.shapes.push(table);
+        }
+
+        drawV.draw();
+    }
+    
+    function creatArcTable() {
+        var arcTable = new DBCanvas.ArcTable(520,475,70);
+        arcTable.alpha = 1;
+        arcTable.tableColor = "red";
+        arcTable.deskColor = "black";
+        arcTable.strokeStyle = "black";
+        arcTable.DeSerialization();
+        arcTable.personCount = 7;
+        drawV.shapes.push(arcTable);
+        drawV.draw();
+    }
+
+
+
+    
+    function creatPartition() {
+        var partition = new DBCanvas.Partition(60,30,100,25);
+        partition.alpha = 0.5;
+        partition.strokeStyle = "black";
+        drawV.shapes.push(partition);
+        drawV.draw();
+    }
+    
+    function creatAisle() {
+        var aisle = new DBCanvas.Aisle(120,230,10,100);
+        aisle.alpha = 1;
+        drawV.shapes.push(aisle);
+        drawV.draw();
+    }
+    
+    function creatExit() {
+        var exit = new DBCanvas.Exit(60,50,80);
+        exit.alpha = 1.0;
+        drawV.shapes.push(exit);
+        drawV.draw();
+    }
+
+    function creatToilet() {
+        try{
+            var toilet = new DBCanvas.Toilet(160,80,80);
+        }catch (error){
+            DBCanvas.Tools.print(error);
+        }
+
+        toilet.alpha = 1.0;
+        drawV.shapes.push(toilet);
+        drawV.draw();
+    }
+
+    function changeMode() {
+//        DBCanvas.Tools.print("模式切换");
+        drawV.changeMode();
+
+    }
+
+    var json = undefined;
+    //保存数据
+    function saveDatas() {
+       json = drawV.saveContext();
+//       DBCanvas.Tools.print(json);
+    }
+
+    function readDatas() {
+
+        drawV.readContext(json);
+    }
+
+
+    function removeShape() {
+        drawV.removeShape();
+    }
+
+
+//    DBCanvas.Tools.print("hello");
+
+    //收银台
+//    var cashier = new DBCanvas.Cashier(100,100,200);
+//    drawV.shapes.push(cashier);
+
+//    文字标识区域
+//    try {
+//        var textArea01 = new DBCanvas.TextArea(200,200,100);
+//        drawV.shapes.push(textArea01);
+//    }catch (error){
+//        DBCanvas.Tools.print(error);
+//    }
+
+    //入口
+//    var entrance = new DBCanvas.Entrance(300,300,200);
+//    drawV.shapes.push(entrance);
+
+    //吧台
+//    var barCounter = new DBCanvas.BarCounter(400,450,300);
+//    drawV.shapes.push(barCounter);
+
+//    var arcTable = new DBCanvas.ArcTable(400,505,70);
+////        arcTable.alpha = 0.5;
+//        arcTable.tableColor = "#7C481A";
+//        arcTable.deskColor = "black";
+//
+//        arcTable.personCount = 6;
+//        drawV.shapes.push(arcTable);
+
+
+
+    document.addEventListener('touchstart',touch,false);
+    document.addEventListener('touchmove',touch,false);
+    document.addEventListener('touchend',touch,false);
+
+    function touch(event) {
+        DBCanvas.Tools.print("touch");
+        var event = event || window.event;
+        switch (event.type){
+            case "touchstart":
+                DBCanvas.Tools.print("touchstart");
+                break;
+            case "touchmove":
+                DBCanvas.Tools.print("touchmove");
+                break;
+            case "touchend":
+                DBCanvas.Tools.print("touchend");
+                break;
+
+            default:
+                break;
+        }
+    }
+
+
+//    var rect01 = new DBCanvas.Rect(100,60,40,40);
+//    rect01.strokeStyle = "white";
+//    rect01.fillStyle = "red";
+//    rect01.cornerRadius = 10;
+//    drawV.shapes.push(rect01);
+
+//
+
+
+//    var rect02 = new DBCanvas.Rect(120,120,40,40,"green");
+//    rect02.cornerRadius = 10;
+//    rect02.strokeStyle = "white";
+//    drawV.shapes.push(rect02);
+
+
+//    try{
+//        var arc01 = new DBCanvas.Arc(220,60,30,0,Math.PI*2,0);
+//        arc01.fillStyle = "yellow";
+//        drawV.shapes.push(arc01);
+//
+////        var polygon = new DBCanvas.Polygon(50,50,30,5);
+////        drawV.shapes.push(polygon);
+//    }catch (error){
+//        alert(error);
+//    }
+
+    try{
+        //方桌
+//        for(var i=0;i<1;i++){
+//            var table = new DBCanvas.RectTable(60,90,150,90,6);
+//       table.strokeStyle = "black";
+//       table.lineWidth = 0.5;
+//        drawV.shapes.push(table);
+//        }
+
+
+        //圆桌
+//        var arcTable = new DBCanvas.ArcTable(120,75,70,5);
+//        arcTable.strokeStyle = "black";
+//        drawV.shapes.push(arcTable);
+
+        //隔断
+//        var partition = new DBCanvas.Partition(60,30,100,50);
+//        partition.strokeStyle = "black";
+//        drawV.shapes.push(partition);
+
+        //通道
+//        var aisle = new DBCanvas.Aisle(120,230,50,100);
+//        drawV.shapes.push(aisle);
+
+        //安全出口
+//        var exit = new DBCanvas.Exit(60,50,80);
+//        drawV.shapes.push(exit);
+
+        //卫生间
+//        var toilet = new DBCanvas.Toilet(160,80,80);
+//        drawV.shapes.push(toilet);
+
+
+    }catch (error){
+        DBCanvas.Tools.print(error);
+    }
+
+
+//    var rect = new DBCanvas.Rect(10,10,40,40,"red");
+//    rect.strokeStyle = "white";
+//    drawV.shapes.push(rect);
+
+//    var line = new DBCanvas.Line(750,750,100,100);
+//
+//    line.lineWidth = 40;
+//    drawV.shapes.push(line);
+//    alert(drawV.shapes.length);
+
+
+
+
+    drawV.draw();
+
+//    drawV.saveContext();
+
+</script>
+</body>
+</html>
